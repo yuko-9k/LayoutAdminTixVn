@@ -1,0 +1,123 @@
+.carousel_movie {
+    margin-top: 60px;
+    .carousel_movie_container {
+        // Kỹ thuật Giữ tỉ lệ khung hình với width động bằng CSS
+        .movie_item {
+            position: relative;
+            overflow: hidden;
+            &::before {
+                content: "";
+                display: block;
+                padding-top: 42%;
+                width: 100%;
+            }
+            .carousel_movie_item {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                margin: auto;
+                background-size: cover;
+                background-position: center;
+                cursor: pointer;
+                .button_trailer_movie {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: none;
+                    border: none;
+                    opacity: 1;
+                    display: none;
+                    transition: all 0.3s;
+                    height: 75px;
+                    width: 75px;
+                    img{
+                        width: 100%;
+                    }
+                    &:hover {
+                        opacity: 0.5;
+                    }
+                    &:focus {
+                        outline: none;
+                    }
+                }
+                &:hover .button_trailer_movie {
+                    display: block;
+                }
+            }
+        }
+    }
+    .modal {
+        .modal-dialog {
+            margin: 0;
+            position: absolute;
+            left: 50%;
+            top: 60%;
+            transform: translate(-50%, -50%);
+            .modal-body {
+                padding: 0;
+                height: 500px;
+                iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+                .close {
+                    position: absolute;
+                    top: -20px;
+                    right: -20px;
+                    opacity: 1;
+                    z-index: 2;
+                    transition: all 0.2s;
+                    &:hover {
+                        opacity: .5;
+                    }
+                    &:focus {
+                        outline: none;
+                        border: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width:992px) {
+    .modal-lg {
+        height: 550px;
+        width: 900px;
+    }
+}
+
+@media screen and (max-width:991px) {
+    .modal-lg {
+        width: 598px;
+        height: 335px;
+    }
+    .carousel_movie {
+        .modal {
+            .modal-dialog {
+                .modal-body {
+                    height: 335px;
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: unset;
+        margin: 1.75rem auto;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .carousel_movie {
+        display: none;
+    }
+}

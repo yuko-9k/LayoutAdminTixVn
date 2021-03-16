@@ -1,0 +1,120 @@
+// .owl-carousel .owl-nav button.owl-prev {
+//     background-image: url('../../img/Icon/back-session.png');
+//     width: 50px;
+//     height: 100px;
+//     background-color: transparent;
+//     border: none;
+//     background-repeat: no-repeat;
+//     background-position: center;
+//     background-size: contain;
+//     span {
+//         display: none;
+//     }
+//     &:hover {
+//         background-image: url('../../img/Icon/back-session.png');
+//         width: 50px;
+//         height: 100px;
+//         background-color: transparent;
+//         border: none;
+//         background-repeat: no-repeat;
+//         background-position: center;
+//         background-size: contain;
+//     }
+//     &:focus {
+//         outline: none;
+//     }
+// }
+
+// .owl-carousel .owl-nav button.owl-next {
+//     background-image: url('../../img/Icon/next-session.png');
+//     width: 50px;
+//     height: 100px;
+//     background-color: transparent;
+//     border: none;
+//     background-repeat: no-repeat;
+//     background-position: center;
+//     background-size: contain;
+//     span {
+//         display: none;
+//     }
+//     &:hover {
+//         background-image: url('../../img/Icon/next-session.png');
+//         width: 50px;
+//         height: 100px;
+//         background-color: transparent;
+//         border: none;
+//         background-repeat: no-repeat;
+//         background-position: center;
+//         background-size: contain;
+//     }
+//     &:focus {
+//         outline: none;
+//     }
+// // }
+
+// .carousel_movie {
+//     .owl-prev {
+//         position: absolute;
+//         left: 0;
+//         top: 45%;
+//         transform: translateY(-50%);
+//     }
+//     .owl-next {
+//         position: absolute;
+//         right: 0;
+//         top: 45%;
+//         transform: translateY(-50%);
+//     }
+//     .owl-theme {
+//         .owl-nav {
+//             margin: 0;
+//         }
+//         .owl-dots {
+//             width: 130px;
+//             position: absolute;
+//             bottom: 12%;
+//             left: 50%;
+//             transform: translateX(-50%);
+//             .owl-dot {
+//                 span {
+//                     height: 12px;
+//                     width: 12px;
+//                 }
+//                 &:hover span {
+//                     background-color: #D6D6D6;
+//                 }
+//                 &:focus {
+//                     outline: none;
+//                 }
+//             }
+//             .owl-dot.active {
+//                 span {
+//                     background-color: #fb4226;
+//                 }
+//                 &:hover span {
+//                     background-color: #fb4226;
+//                 }
+//             }
+//         }
+//     }
+// }
+.carousel_movie{
+    .slick-slider{
+        .slick-dots{
+            width: 200px;
+            position: absolute;
+            bottom: 12%;
+            left: 50%;
+            transform: translateX(-50%);
+            li{
+                button::before{
+                    font-size: 12px;
+                    color:#D6D6D6;
+                    :focus{
+                        outline: none;
+                    }
+                }
+            }
+        }
+    }
+}
