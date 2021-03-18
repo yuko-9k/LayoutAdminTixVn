@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -30,11 +30,18 @@ const DialogAddNewUser = (props) => {
   const classes = useStyles();
   const { user, openPopup, setOpenPopup } = props;
   const { register, handleSubmit, control, errors } = useForm();
-  const { err, data } = props;
+  const { data } = props;
   const onSubmit = (data) => {
     let temp = { ...data, maNhom: "GP01" };
     props.ChangeInfoUser(temp);
   };
+  const [errChangeUser, setErrChangeUser] = useState();
+  useEffect(() => {
+    const { err } = props;
+    if (err) {
+      setErrChangeUser(err);
+    }
+  }, [props.err]);
   return (
     <div>
       <Dialog
@@ -140,8 +147,8 @@ const DialogAddNewUser = (props) => {
       ) : (
         ""
       )}
-      {err ? (
-        <NotifiCation message={"Something is wrong!!!"} severity="error" />
+      {errChangeUser ? (
+        <NotifiCation message={errChangeUser} severity="error" />
       ) : (
         ""
       )}
@@ -152,6 +159,7 @@ const DialogAddNewUser = (props) => {
 const mapStateToProps = (state) => {
   return {
     data: state.ChangeUserReducer.data,
+    err: state.ChangeUserReducer.err,
     loading: state.ChangeUserReducer.loading,
   };
 };

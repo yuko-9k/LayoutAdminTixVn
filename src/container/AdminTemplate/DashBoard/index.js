@@ -5,17 +5,15 @@ import { makeStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { CardUser } from "../../../components/AdminComponent/Card/CardUser";
 import { connect } from "react-redux";
-
+const useStyle = makeStyles({
+  root: {
+    backgroundColor: "#333",
+    color: "#fff",
+  },
+});
 function DashBoard(props) {
-  const useStyle = makeStyles({
-    root: {
-      backgroundColor: "#333",
-      color: "#fff",
-    },
-  });
-
   const classes = useStyle();
-  const user = JSON.parse(sessionStorage.getItem("userAdmin"));
+  const user = JSON.parse(sessionStorage.getItem("USER"));
   return (
     <React.Fragment>
       <CssBaseline />

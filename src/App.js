@@ -5,6 +5,7 @@ import HomeTemplate from "./container/HomeTemplate";
 import AdminLayout from "./container/AdminTemplate";
 import LoginPage from "./container/AdminTemplate/AuthPage";
 import PageNotFound from "./container/HomeTemplate/PageNotFound/index";
+import RegisterPage from "./container/AdminTemplate/RegisterPage";
 
 function App() {
   const showLayoutHome = (routes) => {
@@ -38,8 +39,9 @@ function App() {
   return (
     <Switch>
       {showLayoutHome(routesHome)}
-      <Route path="/login" component={LoginPage} />
       {showLayoutAdmin(routesAdmin)}
+      <Route path="/login" component={LoginPage} />
+      <Route path="/RegisterPage" component={RegisterPage} />
       <Route path="" component={PageNotFound} />
     </Switch>
   );

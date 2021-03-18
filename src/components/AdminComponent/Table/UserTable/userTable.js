@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -76,8 +76,18 @@ const UserTable = ({ children, ...props }) => {
   const [openWarning, setOpenWarning] = useState(false);
   const [user, setUser] = useState();
   const [userDelete, setuserDelete] = useState("");
-  const { data, err } = props;
-
+  const [dataSuccess, setDataSuccess] = useState("");
+  const [dataFail, setDataFail] = useState("");
+  useEffect(() => {
+    const { data, err } = props;
+    if (data) {
+      setDataSuccess(data);
+      setOpenWarning(false);
+    }
+    if (err) {
+      setDataFail(err);
+    }
+  }, [props.data, props.err]);
   return (
     <Paper className={classes.root}>
       <TableContainer className={classes.container}>
@@ -166,7 +176,6 @@ const UserTable = ({ children, ...props }) => {
           </Button>
           <Button
             onClick={() => {
-              setOpenWarning(false);
               handleDeleteUser(userDelete);
             }}
             color="primary"
@@ -176,16 +185,22 @@ const UserTable = ({ children, ...props }) => {
           </Button>
         </DialogActions>
       </AlertDialog>
-      {err ? <NotifiCation severity="error" message={err} /> : ""}
-      {data ? <NotifiCation severity="success" message={data} /> : ""}
+      {dataFail ? <NotifiCation severity="error" message={dataFail} /> : ""}
+      {dataSuccess ? (
+        <NotifiCation severity="success" message={dataSuccess} />
+      ) : (
+        ""
+      )}
     </Paper>
   );
 };
 
 const mapStateToProps = (state) => {
+  const { DeleteUserReducer, UserReducer } = state;
   return {
-    data: state.DeleteUserReducer.data,
-    err: state.DeleteUserReducer.err,
+    data: DeleteUserReducer.data,
+    err: DeleteUserReducer.err,
+    allUser: UserReducer.data,
   };
 };
 

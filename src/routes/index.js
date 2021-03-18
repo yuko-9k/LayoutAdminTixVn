@@ -3,6 +3,7 @@ import LoginPage from "../container/AdminTemplate/AuthPage/index";
 import DashBoard from "../container/AdminTemplate/DashBoard";
 import UserManager from "../container/AdminTemplate/UserManager";
 import MovieManagerPage from "../container/AdminTemplate/MovieManager";
+import RegisterPage from "../container/AdminTemplate/RegisterPage";
 const routesHome = [
   {
     exact: true,
@@ -18,11 +19,6 @@ const routesHome = [
 const routesAdmin = [
   {
     exact: false,
-    path: "/login",
-    component: LoginPage,
-  },
-  {
-    exact: false,
     path: "/dashboard",
     component: DashBoard,
   },
@@ -32,7 +28,7 @@ const routesAdmin = [
     component: UserManager,
   },
   {
-    axact: false,
+    exact: false,
     path: "/MovieManagerPage",
     component: MovieManagerPage,
   },

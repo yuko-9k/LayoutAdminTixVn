@@ -72,3 +72,39 @@ const actGetListMovieByDateFail = (err) => {
     payload: err,
   };
 };
+
+// Add New Movie
+
+export const actAddNewMovieCallApi = (formdata) => {
+  return (dispatch) => {
+    dispatch(actAddNewMovieRequest());
+    api
+      .post("/QuanLyPhim/ThemPhimUploadHinh", formdata)
+      .then((result) => {
+        dispatch(actAddNewMovieSuccess(result?.data));
+      })
+      .catch((err) => {
+        dispatch(actAddNewMovieFail(err?.response?.data));
+      });
+  };
+};
+
+const actAddNewMovieRequest = () => {
+  return {
+    type: ActionTypes.addNewMovieRequest,
+  };
+};
+
+const actAddNewMovieSuccess = (data) => {
+  return {
+    type: ActionTypes.addNewMovieSuccess,
+    payload: data,
+  };
+};
+
+const actAddNewMovieFail = (err) => {
+  return {
+    type: ActionTypes.addNewMovieFail,
+    payload: err,
+  };
+};

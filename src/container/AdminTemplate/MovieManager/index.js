@@ -1,8 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import { Grid, makeStyles, MenuItem, Paper, Select } from "@material-ui/core";
+import {
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  makeStyles,
+  MenuItem,
+  Paper,
+  Select,
+} from "@material-ui/core";
 import { DefaultButton } from "../../../components/AdminComponent/Button/defaultButton";
 import { connect } from "react-redux";
 import * as act from "./modules/actions";
@@ -13,11 +23,16 @@ import { Controller, useForm } from "react-hook-form";
 import moment from "moment";
 import { Fragment } from "react";
 import { Alert } from "@material-ui/lab";
+import { AlertDialog } from "../../../components/AdminComponent/PopUp/DefaultDialog/AlertDialog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     padding: "0",
+  },
+  navButtons: {
+    display: "flex",
+    justifyContent: "space-around",
   },
   content: {
     padding: "50px",
@@ -44,7 +59,10 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(1),
     fontWeight: "bold",
-    fontSize: "40px",
+    fontSize: "30px",
+  },
+  DialogContent: {
+    display: "block",
   },
 }));
 
@@ -53,20 +71,29 @@ function MovieManagerPage(props) {
   const [openListMovie, setOpenListMovie] = useState(false);
   const [openAddNew, setOpenAddNew] = useState(false);
   const [dataListMovie, setDataListMovie] = useState();
+  const [newMovie, setNewMovie] = useState();
+  const [newMovieErr, setNewMovieErr] = useState();
+  const [openWarning, setOpenWarning] = useState(false);
+  const [openError, setOpenError] = useState(false);
   const values = {
     someDate: new Date().toISOString().substring(0, 10),
   };
   const handleGetListMovie = () => {
-    props.getListMovie();
     setOpenListMovie(true);
     setOpenAddNew(false);
-    const { data } = props;
-    setDataListMovie(data);
   };
+  const { data } = props;
+
+  useEffect(() => {
+    props.getListMovie();
+  }, []);
+  useEffect(() => {
+    setDataListMovie(data);
+  }, [data]);
 
   const handleAddNewMovie = () => {
     setOpenAddNew(true);
-    setDataListMovie(false);
+    setOpenListMovie(false);
   };
 
   const { register, handleSubmit, control, errors } = useForm();
@@ -78,12 +105,31 @@ function MovieManagerPage(props) {
     };
     props.sortMovieByDate(temp);
     const { dat } = props;
-    console.log(dat);
     setDataListMovie(dat);
   };
+
   const submitForm = (data) => {
-    console.log(data);
+    data.hinhAnh = data.hinhAnh[0];
+    let temp = new FormData();
+    for (var key in data) {
+      temp.append(key, data[key]);
+    }
+    props.addNewMovie(temp);
   };
+  useEffect(() => {
+    const { newMovie, err } = props;
+    if (newMovie) {
+      console.log(newMovie);
+      setNewMovie(newMovie);
+      setOpenWarning(true);
+    }
+    if (err) {
+      console.log(err);
+      setNewMovieErr(err);
+      setOpenError(true);
+    }
+  }, [props.newMovie, props.err]);
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -94,7 +140,7 @@ function MovieManagerPage(props) {
           className={classes.content}
         >
           <Grid container spacing={3}>
-            <Grid item xs={2}>
+            <Grid item xs={12} className={classes.navButtons}>
               <DefaultButton color="default" onClick={handleGetListMovie}>
                 Get List Movie
               </DefaultButton>
@@ -102,7 +148,7 @@ function MovieManagerPage(props) {
                 Add New Movie
               </DefaultButton>
             </Grid>
-            <Grid item xs={10}>
+            <Grid item xs={12}>
               {openListMovie && dataListMovie ? (
                 <Fragment>
                   <Paper className={classes.paper}>
@@ -191,7 +237,8 @@ function MovieManagerPage(props) {
                     {errors.trailer && (
                       <Alert severity="error">This field is required</Alert>
                     )}
-                    <MyTxt name="hinhAnh" type="file" ref={register} />
+                    {/* <MyTxt name="hinhAnh" type="file" ref={register} /> */}
+                    <input type="file" name="hinhAnh" ref={register} />
                     <MyTxt
                       name="moTa"
                       label="Mô tả"
@@ -237,6 +284,87 @@ function MovieManagerPage(props) {
                     )}
                     <DefaultButton type="submit">Submit</DefaultButton>
                   </FormControl>
+                  {newMovie ? (
+                    <AlertDialog
+                      openWarning={openWarning}
+                      setOpenWarning={setOpenWarning}
+                    >
+                      <DialogTitle id="alert-dialog-title">
+                        {"Add New Movie Success!"}
+                      </DialogTitle>
+                      <DialogContent className={classes.DialogContent}>
+                        <MyTxt
+                          disabled
+                          label="Mã phim"
+                          defaultValue={newMovie.Maphim}
+                        />
+                        <MyTxt
+                          disabled
+                          label="Tên phim"
+                          defaultValue={newMovie.tenPhim}
+                        />
+                        <MyTxt
+                          disabled
+                          label="Mã nhóm"
+                          defaultValue={newMovie.maNhom}
+                        />
+                        <MyTxt
+                          disabled
+                          label="Hình ảnh"
+                          defaultValue={newMovie.hinhAnh}
+                        />
+                        <MyTxt
+                          disabled
+                          label="Đánh giá"
+                          defaultValue={newMovie.danhGia}
+                        />
+                        <MyTxt
+                          disabled
+                          label="Bí danh"
+                          defaultValue={newMovie.biDanh}
+                        />
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          color="primary"
+                          autoFocus
+                          onClick={() => {
+                            setOpenWarning(false);
+                          }}
+                        >
+                          Agree
+                        </Button>
+                      </DialogActions>
+                    </AlertDialog>
+                  ) : (
+                    ""
+                  )}
+                  {newMovieErr ? (
+                    <AlertDialog
+                      openWarning={openError}
+                      setOpenWarning={setOpenError}
+                    >
+                      <DialogTitle id="alert-dialog-title">
+                        {"Some thing is wrong!"}
+                      </DialogTitle>
+                      <DialogContent className={classes.DialogContent}>
+                        {newMovieErr}
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          color="primary"
+                          autoFocus
+                          onClick={() => {
+                            setOpenError(false);
+                          }}
+                        >
+                          Agree
+                        </Button>
+                      </DialogActions>
+                    </AlertDialog>
+                  ) : (
+                    ""
+                  )}
                 </Paper>
               ) : (
                 ""
@@ -250,11 +378,17 @@ function MovieManagerPage(props) {
 }
 
 const mapStateToProps = (state) => {
-  const { getListMovieReducer, getListMovieByDateReducer } = state;
+  const {
+    getListMovieReducer,
+    getListMovieByDateReducer,
+    addNewMovieReducer,
+  } = state;
   return {
     loading: getListMovieReducer.loading,
     data: getListMovieReducer.data,
     dat: getListMovieByDateReducer.data,
+    newMovie: addNewMovieReducer.data,
+    err: addNewMovieReducer.err,
   };
 };
 
@@ -265,6 +399,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     sortMovieByDate: (data) => {
       dispatch(act.actGetListMovieByDate(data));
+    },
+    addNewMovie: (formData) => {
+      dispatch(act.actAddNewMovieCallApi(formData));
     },
   };
 };

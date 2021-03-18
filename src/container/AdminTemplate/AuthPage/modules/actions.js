@@ -8,28 +8,17 @@ export const actLoginCallApi = (user, history) => {
       .post("/QuanLyNguoiDung/DangNhap", user)
       .then((result) => {
         dispatch(actLoginSuccess(result.data));
-        if (result.data.maLoaiNguoiDung === "QuanTri") {
-          sessionStorage.setItem("userAdmin", JSON.stringify(result.data));
-          sessionStorage.setItem(
-            "accessToken",
-            JSON.stringify(result.data.accessToken)
-          );
-          history.replace("/dashboard");
-        } else {
-          return Promise.reject({
-            response: { data: "Bạn không có quyền truy cập" },
-          });
-        }
+        sessionStorage.setItem("USER", JSON.stringify(result.data));
+        history.replace("/");
       })
       .catch((err) => {
-        dispatch(actLoginFail(err.response.data));
+        dispatch(actLoginFail(err?.response?.data));
       });
   };
 };
 
 export const actUserLogot = (history) => {
-  sessionStorage.removeItem("accessToken");
-  sessionStorage.removeItem("userAdmin");
+  sessionStorage.removeItem("USER");
   history.replace("/login");
   return {
     type: ActionTypes.USER_LOGOUT,

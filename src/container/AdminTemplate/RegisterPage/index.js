@@ -1,21 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import bgLogin from "../../../img/backGround/bgLogin.jpg";
 import lgLogin from "../../../img/logo/group@2x.png";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
 import { useForm } from "react-hook-form";
 import Alert from "@material-ui/lab/Alert";
 import { MyTxt } from "../../../components/AdminComponent/TextField";
 import { FormControl } from "../../../components/AdminComponent/FormControl";
 import { MiniLoading } from "../../../components/AdminComponent/MiniLoading";
-import * as act from "./modules/actions";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { DefaultButton } from "../../../components/AdminComponent/Button/defaultButton";
+import * as act from "./modules/actions";
+import { NavLink } from "react-router-dom";
 
-function LoginPage(props) {
+function RegisterPage(props) {
   const useStyle = makeStyles((theme) => ({
     root: {
       backgroundImage: `url(${bgLogin})`,
@@ -41,12 +41,21 @@ function LoginPage(props) {
       cursor: "pointer",
     },
   }));
+  const classes = useStyle();
   const { register, handleSubmit, errors } = useForm();
   const onSubmit = (data) => {
-    props.userLogin(data, props.history);
+    let temp = { ...data, maLoaiNguoiDung: "KhachHang", maNhom: "GP04" };
+    props.RegisterUser(temp);
   };
-  const classes = useStyle();
-  const { err, loading } = props;
+  const [userRegister, setUserRegister] = useState({
+    loading: false,
+    data: null,
+    err: null,
+  });
+  useEffect(() => {
+    const { loading, data, err } = props;
+    setUserRegister({ ...userRegister, loading, data, err });
+  }, [props.loading, props.data, props.err]);
   return (
     <React.Fragment>
       <CssBaseline />
@@ -56,30 +65,43 @@ function LoginPage(props) {
           <img src={lgLogin} alt="logo Login" className={classes.logoTitle} />
           <FormControl onSubmit={handleSubmit(onSubmit)}>
             <MyTxt
-              label="Tài Khoản"
               name="taiKhoan"
+              label="Tài khoản"
               ref={register({ required: true })}
             />
-            {errors.taiKhoan && (
-              <Alert severity="error">Vui lòng không để trống!</Alert>
-            )}
+            {errors.taiKhoan && <Alert>This field is required</Alert>}
             <MyTxt
+              name="matKhau"
               label="Mật khẩu"
               type="password"
-              name="matKhau"
               ref={register({ required: true })}
             />
-            {errors.matKhau && (
-              <Alert severity="error">Vui lòng không để trống!</Alert>
-            )}
-            <Button fullWidth variant="contained" color="primary" type="submit">
-              Login
-              {loading ? <MiniLoading size="20px" /> : ""}
-            </Button>
-            <Button fullWidth variant="contained" color="default" type="submit">
-              <Link to="/RegisterPage">Register</Link>
-            </Button>
-            {err ? <Alert severity="error">{err}</Alert> : ""}
+            {errors.matKhau && <Alert>This field is required</Alert>}
+            <MyTxt
+              name="email"
+              label="Email"
+              ref={register({ required: true })}
+            />
+            {errors.email && <Alert>This field is required</Alert>}
+            <MyTxt
+              name="soDt"
+              label="Số điện thoại"
+              ref={register({ required: true })}
+            />
+            {errors.soDt && <Alert>This field is required</Alert>}
+            <MyTxt
+              name="hoTen"
+              label="Họ tên"
+              ref={register({ required: true })}
+            />
+            {errors.hoTen && <Alert>This field is required</Alert>}
+            <DefaultButton fullWidth color="default" type="submit">
+              Register
+              {userRegister.loading ? <MiniLoading /> : ""}
+            </DefaultButton>
+            <DefaultButton fullWidth>
+              <NavLink to="/login">Login</NavLink>
+            </DefaultButton>
           </FormControl>
         </div>
       </Container>
@@ -89,17 +111,18 @@ function LoginPage(props) {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.AuthReducer.loading,
-    err: state.AuthReducer.err,
+    loading: state.RegisterUserReducer.loading,
+    data: state.RegisterUserReducer.data,
+    err: state.RegisterUserReducer.err,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    userLogin: (user, history) => {
-      dispatch(act.actLoginCallApi(user, history));
+    RegisterUser: (data) => {
+      dispatch(act.RegisterUserCallapi(data));
     },
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage);

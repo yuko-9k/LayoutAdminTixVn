@@ -7,7 +7,6 @@ import { MyTxt } from "../../../components/AdminComponent/TextField";
 import * as act from "./modules/actions";
 import { connect } from "react-redux";
 import UserTable from "../../../components/AdminComponent/Table/UserTable/userTable";
-import { LinearCustom } from "../../../components/AdminComponent/Progress/Linear";
 import { DefaultButton } from "../../../components/AdminComponent/Button/defaultButton";
 import { MyDialog } from "../../../components/AdminComponent/PopUp/DefaultDialog/CustomDialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -33,32 +32,60 @@ const useStyles = makeStyles({
   select: {
     width: "100%",
   },
+  formFindUser: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
+  },
+  inputNoSpace: {
+    margin: 0,
+    width: "50%",
+  },
+  Controller: {
+    width: "150px",
+  },
 });
 
 function UserManager(props) {
   const classes = useStyles();
-  const [searchUser, setSearchUser] = useState("");
-
+  const [errAddUser, setErrAddUser] = useState("");
+  const [successAddUser, setSuccessAddUser] = useState("");
+  const [dataUser, setDataUser] = useState();
+  const [searchUser, setSearchUSer] = useState({ search: "", result: "" });
   useEffect(() => {
     props.getAllUser();
   }, []);
 
-  const { data, loading, dat, er } = props;
-  if (searchUser) {
-    const temp = data.filter((item) => {
-      return item.taiKhoan == searchUser;
-    });
-    console.log(temp);
-  }
+  useEffect(() => {
+    const { data, er, dat } = props;
+    if (data) {
+      setDataUser(data);
+    }
+    if (er) {
+      setErrAddUser(er);
+    }
+    if (dat) {
+      setSuccessAddUser(dat);
+      setOpenPopUp(false);
+    }
+  }, [props.data, props.dat]);
 
   const { register, handleSubmit, control, errors } = useForm();
   const onSubmit = (data) => {
     let temp = { ...data, maNhom: "GP01" };
     props.addNewUser(temp);
   };
+  const handleSearchUser = (data) => {
+    props.findUser(data.tuKhoa, data.maNhom);
+  };
+  useEffect(() => {
+    const { dataFindUser } = props;
+    if (dataFindUser) {
+      setDataUser(dataFindUser);
+    }
+  }, [props.dataFindUser]);
 
   const [openPopUp, setOpenPopUp] = useState(false);
-
   return (
     <div>
       <React.Fragment>
@@ -70,22 +97,44 @@ function UserManager(props) {
             className={classes.content}
           >
             <Container maxWidth="lg">
-              <MyTxt
-                label="Tìm kiếm"
-                onChange={(e) => {
-                  setSearchUser(e.target.value);
-                }}
-              />
+              <FormControl
+                className={classes.formFindUser}
+                onSubmit={handleSubmit(handleSearchUser)}
+              >
+                <MyTxt
+                  label="Find User"
+                  className={classes.inputNoSpace}
+                  name="tuKhoa"
+                  ref={register({ required: true })}
+                />
+                <Controller
+                  as={
+                    <Select variant="outlined" label="Mã nhóm" autoWidth={true}>
+                      <MenuItem value="GP01">GP01</MenuItem>
+                      <MenuItem value="GP02">GP02</MenuItem>
+                      <MenuItem value="GP03">GP03</MenuItem>
+                      <MenuItem value="GP04">GP04</MenuItem>
+                    </Select>
+                  }
+                  name="maNhom"
+                  control={control}
+                  defaultValue="GP01"
+                  className={classes.Controller}
+                />
+                <DefaultButton color="default" type="submit" autoFocus>
+                  Submit
+                </DefaultButton>
+              </FormControl>
+
               <DefaultButton
                 color="primary"
                 onClick={() => {
                   setOpenPopUp(true);
                 }}
               >
-                Thêm người dùng
+                ADD NEW USER
               </DefaultButton>
-              {loading ? <LinearCustom /> : ""}
-              {data ? <UserTable>{data}</UserTable> : ""}
+              {dataUser ? <UserTable>{dataUser}</UserTable> : ""}
             </Container>
           </Typography>
           <MyDialog openPopUp={openPopUp} setOpenPopUp={setOpenPopUp}>
@@ -142,7 +191,6 @@ function UserManager(props) {
                   name="maLoaiNguoiDung"
                   control={control}
                   defaultValue="KhachHang"
-                  className={classes.select}
                 />
 
                 <MyTxt
@@ -163,21 +211,23 @@ function UserManager(props) {
                   >
                     Cancel
                   </Button>
-                  <Button
-                    color="primary"
-                    type="submit"
-                    onClick={() => {
-                      setOpenPopUp(false);
-                    }}
-                  >
+                  <Button color="primary" type="submit">
                     Submit
                   </Button>
                 </DialogActions>
               </FormControl>
-              {dat ? <NotifiCation severity="success" message="Success" /> : ""}
-              {er ? <NotifiCation severity="error" message={er} /> : ""}
             </DialogContent>
           </MyDialog>
+          {successAddUser ? (
+            <NotifiCation severity="success" message="Success" />
+          ) : (
+            ""
+          )}
+          {errAddUser ? (
+            <NotifiCation severity="error" message={errAddUser} />
+          ) : (
+            ""
+          )}
         </Container>
       </React.Fragment>
     </div>
@@ -185,12 +235,14 @@ function UserManager(props) {
 }
 
 const mapStateToProps = (state) => {
-  const { UserReducer, addNewUserReduce } = state;
+  const { UserReducer, addNewUserReduce, findUserReducer } = state;
   return {
-    loading: state.UserReducer.loading,
-    data: state.UserReducer.data,
-    dat: state.addNewUserReduce.data,
-    er: state.addNewUserReduce.err,
+    loading: UserReducer.loading,
+    data: UserReducer.data,
+    dat: addNewUserReduce.data,
+    er: addNewUserReduce.err,
+    dataFindUser: findUserReducer.data,
+    errFindUser: findUserReducer.err,
   };
 };
 
@@ -201,6 +253,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     addNewUser: (data) => {
       dispatch(act.actAddNewUser(data));
+    },
+    findUser: (data, group) => {
+      dispatch(act.actSearchUser(data, group));
     },
   };
 };

@@ -10,7 +10,7 @@ export const actChangeInfoUser = (user) => {
         dispatch(UserSuccess(result.data));
       })
       .catch((err) => {
-        dispatch(UserFail(err));
+        dispatch(UserFail(err?.response?.data));
       });
   };
 };

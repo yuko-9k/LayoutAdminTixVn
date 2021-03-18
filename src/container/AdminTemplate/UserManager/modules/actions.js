@@ -1,6 +1,7 @@
 import * as ActionTypes from "./constants";
 import api from "../../../../api/index";
 
+// GET ALL USER
 export const actGetAllUserCallApi = () => {
   return (dispatch) => {
     dispatch(actGetUserRequest());
@@ -35,6 +36,7 @@ const actGetUserFail = (err) => {
   };
 };
 
+// ADD NEW USER
 export const actAddNewUser = (data) => {
   return (dispatch) => {
     dispatch(actAddNewUserRequest());
@@ -65,6 +67,42 @@ const actAddNewUserSucess = (data) => {
 const actAddNewUserFail = (err) => {
   return {
     type: ActionTypes.addNewUserFail,
+    payload: err,
+  };
+};
+
+// SEARCH USER
+
+export const actSearchUser = (data, group) => {
+  return (dispatch) => {
+    dispatch(actSearchUserRequest());
+    api
+      .get(`/QuanLyNguoiDung/TimKiemNguoiDung?MaNhom=${group}&tuKhoa=${data}`)
+      .then((result) => {
+        dispatch(actSearchUserSuccess(result?.data));
+      })
+      .catch((err) => {
+        dispatch(actSearchUserFail(err?.response?.data));
+      });
+  };
+};
+
+const actSearchUserRequest = () => {
+  return {
+    type: ActionTypes.searchUserRequest,
+  };
+};
+
+const actSearchUserSuccess = (data) => {
+  return {
+    type: ActionTypes.searchUserSuccess,
+    payload: data,
+  };
+};
+
+const actSearchUserFail = (err) => {
+  return {
+    type: ActionTypes.searchUserFail,
     payload: err,
   };
 };

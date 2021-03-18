@@ -29,6 +29,7 @@ const AuthReducer = (state = inittialState, action) => {
       state.err = null;
       return { ...state };
     default:
+      state.data = JSON.parse(sessionStorage.getItem("USER"));
       return { ...state };
   }
 };
