@@ -30,18 +30,21 @@ const DialogAddNewUser = (props) => {
   const classes = useStyles();
   const { user, openPopup, setOpenPopup } = props;
   const { register, handleSubmit, control, errors } = useForm();
-  const { data } = props;
   const onSubmit = (data) => {
     let temp = { ...data, maNhom: "GP01" };
     props.ChangeInfoUser(temp);
   };
-  const [errChangeUser, setErrChangeUser] = useState();
+	const [errChangeUser, setErrChangeUser] = useState();
+	const [successChangeUser, setSuccessChangeUser] = useState();
   useEffect(() => {
-    const { err } = props;
+    const { err,data } = props;
     if (err) {
       setErrChangeUser(err);
-    }
-  }, [props.err]);
+		}
+		if (data) {
+			setSuccessChangeUser(data)
+		}
+  }, [props.data,props.err]);
   return (
     <div>
       <Dialog
@@ -139,7 +142,7 @@ const DialogAddNewUser = (props) => {
           </DialogActions>
         </FormControl>
       </Dialog>
-      {data ? (
+      {successChangeUser ? (
         <NotifiCation
           message={"Thay đổi thông tin thành công"}
           severity="success"
@@ -171,5 +174,6 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(DialogAddNewUser);

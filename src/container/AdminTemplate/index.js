@@ -14,7 +14,6 @@ function LayoutAdmin(props) {
 
 function AdminLayout({ Component, ...props }) {
   const { user } = props;
-  console.log(user);
   if (!user) return <Redirect to="/login" />;
   if (user?.maLoaiNguoiDung === "QuanTri") {
     return (

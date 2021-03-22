@@ -2,8 +2,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Popover from "@material-ui/core/Popover";
 import Typography from "@material-ui/core/Typography";
-import { DefaultButton } from "../../Button/defaultButton";
-import { ClickAwayListener } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   typography: {
@@ -14,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
 export const CustomPopOver = (props) => {
   const classes = useStyles();
   const { openPopOver, setOpenPopOver, src } = props;
-  console.log(src);
   const id = openPopOver ? "simple-popover" : undefined;
 
   return (

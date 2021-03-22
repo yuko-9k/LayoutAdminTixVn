@@ -21,6 +21,13 @@ import {
   ChangeInfoMovieReducer,
 } from "../../components/AdminComponent/Table/MovieTable/modules/reducers";
 import RegisterUserReducer from "../../container/AdminTemplate/RegisterPage/modules/reducers";
+import {
+  GetListCinemaReducer,
+  getMovieOfCinemaReducer,
+  layDanhSachPhongVeReducer,
+  createShowTimesReducer,
+} from "../../container/AdminTemplate/BookingManager/modules/reducers";
+import {infoTheaterReducer,theaterToSystemReducer} from "../../container/AdminTemplate/TheaterManager/modules/reducers";
 
 const rootReducer = combineReducers({
   LocationState,
@@ -39,5 +46,11 @@ const rootReducer = combineReducers({
   DeleteMovieReducer,
   ChangeInfoMovieReducer,
   RegisterUserReducer,
+  GetListCinemaReducer,
+  getMovieOfCinemaReducer,
+  layDanhSachPhongVeReducer,
+  createShowTimesReducer,
+	infoTheaterReducer,
+	theaterToSystemReducer,
 });
 export default rootReducer;

@@ -1,6 +1,6 @@
 import axios from "axios";
-const token = JSON.parse(sessionStorage.getItem("accessToken"));
+const user = JSON.parse(sessionStorage.getItem("USER"));
 export default axios.create({
-  baseURL: "https://movie0706.cybersoft.edu.vn/api",
-  headers: { Authorization: `Bearer ${token}` },
+	baseURL: "https://movie0706.cybersoft.edu.vn/api",
+  headers: { Authorization: `Bearer ${user?.accessToken}` }
 });

@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, withRouter } from "react-router-dom";
+import { Link, NavLink, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -203,7 +203,7 @@ function NavbarAdmin(props) {
             />
           </div>
           <Button color="default" classes={{ root: classes.defaultButton }}>
-            Quản lý đặt vé
+            <Link to="/BookingManagerPage">Quản lý đặt vé</Link>
           </Button>
           <Button color="default" classes={{ root: classes.defaultButton }}>
             <NavLink to="/UserManager">Quản lý người dùng</NavLink>
@@ -212,7 +212,7 @@ function NavbarAdmin(props) {
             <NavLink to="/MovieManagerPage">Quản lý phim</NavLink>
           </Button>
           <Button color="default" classes={{ root: classes.defaultButton }}>
-            Quản lý rạp
+            <NavLink to="/TheaterManagerPage">Quản lý rạp</NavLink>
           </Button>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>

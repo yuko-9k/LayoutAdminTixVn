@@ -84,7 +84,8 @@ const UserTable = ({ children, ...props }) => {
       setDataSuccess(data);
       setOpenWarning(false);
     }
-    if (err) {
+		if (err) {
+			console.log(err);
       setDataFail(err);
     }
   }, [props.data, props.err]);

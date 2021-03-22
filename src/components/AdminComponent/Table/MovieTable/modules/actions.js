@@ -1,5 +1,6 @@
 import * as ActionTypes from "./constant";
 import api from "../../../../../api/index";
+import * as act from "../../../../../container/AdminTemplate/MovieManager/modules/actions";
 
 export const actDeleteMovie = (maPhim) => {
   return (dispatch) => {
@@ -44,6 +45,7 @@ export const actChangeInfoMovie = (fomData) => {
       .post("/QuanLyPhim/CapNhatPhimUpload", fomData)
       .then((result) => {
         dispatch(actChangeInfoMovieSuccess(result.data));
+        dispatch(act.actGetListMovieCallApi());
       })
       .catch((err) => {
         dispatch(actChangeInfoMoviefail(err.response.data));

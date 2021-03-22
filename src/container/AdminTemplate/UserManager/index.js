@@ -51,32 +51,35 @@ function UserManager(props) {
   const [errAddUser, setErrAddUser] = useState("");
   const [successAddUser, setSuccessAddUser] = useState("");
   const [dataUser, setDataUser] = useState();
-  const [searchUser, setSearchUSer] = useState({ search: "", result: "" });
   useEffect(() => {
     props.getAllUser();
   }, []);
-
+  const { data, dataAddNewUser, errAddNewUser } = props;
   useEffect(() => {
-    const { data, er, dat } = props;
     if (data) {
       setDataUser(data);
     }
-    if (er) {
-      setErrAddUser(er);
+    if (errAddNewUser) {
+      setErrAddUser(errAddNewUser);
     }
-    if (dat) {
-      setSuccessAddUser(dat);
+    if (dataAddNewUser) {
+      setSuccessAddUser(dataAddNewUser);
       setOpenPopUp(false);
     }
-  }, [props.data, props.dat]);
+  }, [data, dataAddNewUser, errAddNewUser]);
 
   const { register, handleSubmit, control, errors } = useForm();
+  const {
+    register: register2,
+    handleSubmit: handleSubmit2,
+    control: control2,
+  } = useForm();
+  const handleSearchUser = (data) => {
+    props.findUser(data.tuKhoa, data.maNhom);
+  };
   const onSubmit = (data) => {
     let temp = { ...data, maNhom: "GP01" };
     props.addNewUser(temp);
-  };
-  const handleSearchUser = (data) => {
-    props.findUser(data.tuKhoa, data.maNhom);
   };
   useEffect(() => {
     const { dataFindUser } = props;
@@ -140,11 +143,11 @@ function UserManager(props) {
           <MyDialog openPopUp={openPopUp} setOpenPopUp={setOpenPopUp}>
             <DialogTitle id="form-dialog-title">Add New User</DialogTitle>
             <DialogContent>
-              <FormControl onSubmit={handleSubmit(onSubmit)}>
+              <FormControl onSubmit={handleSubmit2(onSubmit)}>
                 <MyTxt
                   name="taiKhoan"
                   label="Tài khoản"
-                  ref={register({ required: true })}
+                  ref={register2({ required: true })}
                 />
                 {errors.taiKhoan && (
                   <Alert severity="error">This field is required!</Alert>
@@ -153,7 +156,7 @@ function UserManager(props) {
                   label="Mật khẩu"
                   name="matKhau"
                   type="password"
-                  ref={register({ required: true })}
+                  ref={register2({ required: true })}
                 />
                 {errors.matKhau && (
                   <Alert severity="error">This field is required!</Alert>
@@ -162,7 +165,7 @@ function UserManager(props) {
                 <MyTxt
                   label="Email"
                   name="email"
-                  ref={register({ required: true })}
+                  ref={register2({ required: true })}
                 />
                 {errors.email && (
                   <Alert severity="error">This field is required!</Alert>
@@ -171,7 +174,7 @@ function UserManager(props) {
                 <MyTxt
                   label="Số điện thoại"
                   name="soDt"
-                  ref={register({ required: true })}
+                  ref={register2({ required: true })}
                 />
                 {errors.soDt && (
                   <Alert severity="error">This field is required!</Alert>
@@ -189,14 +192,14 @@ function UserManager(props) {
                     </Select>
                   }
                   name="maLoaiNguoiDung"
-                  control={control}
+                  control={control2}
                   defaultValue="KhachHang"
                 />
 
                 <MyTxt
                   label="Họ tên"
                   name="hoTen"
-                  ref={register({ required: true })}
+                  ref={register2({ required: true })}
                 />
                 {errors.hoTen && (
                   <Alert severity="error">This field is required!</Alert>
@@ -239,8 +242,8 @@ const mapStateToProps = (state) => {
   return {
     loading: UserReducer.loading,
     data: UserReducer.data,
-    dat: addNewUserReduce.data,
-    er: addNewUserReduce.err,
+    dataAddNewUser: addNewUserReduce.data,
+    errAddNewUser: addNewUserReduce.err,
     dataFindUser: findUserReducer.data,
     errFindUser: findUserReducer.err,
   };

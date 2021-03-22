@@ -4,6 +4,8 @@ import DashBoard from "../container/AdminTemplate/DashBoard";
 import UserManager from "../container/AdminTemplate/UserManager";
 import MovieManagerPage from "../container/AdminTemplate/MovieManager";
 import RegisterPage from "../container/AdminTemplate/RegisterPage";
+import BookingManagerPage from "../container/AdminTemplate/BookingManager";
+import TheaterManagerPage from "../container/AdminTemplate/TheaterManager";
 const routesHome = [
   {
     exact: true,
@@ -31,6 +33,16 @@ const routesAdmin = [
     exact: false,
     path: "/MovieManagerPage",
     component: MovieManagerPage,
+  },
+  {
+    exact: false,
+    path: "/BookingManagerPage",
+    component: BookingManagerPage,
+  },
+  {
+    exact: false,
+    path: "/TheaterManagerPage",
+    component: TheaterManagerPage,
   },
 ];
 export { routesHome, routesAdmin };

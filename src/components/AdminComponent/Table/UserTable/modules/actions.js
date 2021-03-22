@@ -1,5 +1,6 @@
 import * as ActionTypes from "./constant";
 import api from "../../../../../api";
+import * as act from "../../../../../container/AdminTemplate/UserManager/modules/actions";
 
 export const actDeleteUser = (user) => {
   return (dispatch) => {
@@ -8,6 +9,7 @@ export const actDeleteUser = (user) => {
       .delete(`/QuanLyNguoiDung/XoaNguoiDung?TaiKhoan=${user}`)
       .then((result) => {
         dispatch(actDeleteUserSuccess(result.data));
+        dispatch(act.actGetAllUserCallApi());
       })
       .catch((err) => {
         dispatch(actDeleteUserFail(err.response.data));

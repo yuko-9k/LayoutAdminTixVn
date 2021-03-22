@@ -1,5 +1,6 @@
 import * as ActionTypes from "./constants";
 import api from "../../../../../api/index";
+import * as act from "../../../../../container/AdminTemplate/UserManager/modules/actions";
 
 export const actChangeInfoUser = (user) => {
   return (dispatch) => {
@@ -8,6 +9,7 @@ export const actChangeInfoUser = (user) => {
       .put("/QuanLyNguoiDung/CapNhatThongTinNguoiDung", user)
       .then((result) => {
         dispatch(UserSuccess(result.data));
+        dispatch(act.actGetAllUserCallApi());
       })
       .catch((err) => {
         dispatch(UserFail(err?.response?.data));

@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
 
 function MovieManagerPage(props) {
   const classes = useStyles();
-  const [openListMovie, setOpenListMovie] = useState(false);
+  const [openListMovie, setOpenListMovie] = useState(true);
   const [openAddNew, setOpenAddNew] = useState(false);
   const [dataListMovie, setDataListMovie] = useState();
   const [newMovie, setNewMovie] = useState();
@@ -86,7 +86,8 @@ function MovieManagerPage(props) {
 
   useEffect(() => {
     props.getListMovie();
-  }, []);
+	}, []);
+	
   useEffect(() => {
     setDataListMovie(data);
   }, [data]);
@@ -152,7 +153,7 @@ function MovieManagerPage(props) {
               {openListMovie && dataListMovie ? (
                 <Fragment>
                   <Paper className={classes.paper}>
-                    Sort by date-time
+                    Lấy danh sách phim theo ngày
                     <FormControl
                       className={classes.formSortDate}
                       onSubmit={handleSubmit(onSubmit)}
